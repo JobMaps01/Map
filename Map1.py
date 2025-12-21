@@ -531,6 +531,13 @@ if run_git_command(["git", "--version"])[0]:
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     commit_success, commit_output = run_git_command(["git", "commit", "-m", f"Update salaries {timestamp}"])
 
+    print("🔄 Синхронизация с сервером (git pull)...")
+    pull_success, pull_output = run_git_command(["git", "pull", "--rebase", "--autostash", "-X", "ours"])
+    if not pull_success:
+        print(f"⚠️ Ошибка при пуле: {pull_output}")
+    else:
+        print(f"✅ Пул успешен: {pull_output}")
+
     print("⏳ Отправка на сервер...")
     push_success, push_output = run_git_command(["git", "push"])
     if push_success:
